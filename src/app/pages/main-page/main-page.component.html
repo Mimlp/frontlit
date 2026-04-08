@@ -1,0 +1,13 @@
+<h3>Добро пожаловать на наш сайт!</h3>
+<div>Наши авторы:</div>
+@for (user of users; track user.userId) {
+  <app-profile-card
+    [user]="user"
+  ></app-profile-card>
+}
+<div>Работы, размещённые на сайте:</div>
+@for (book of books; track book.bookId) {
+  <app-book-card
+    [book]="book"
+  ></app-book-card>
+}

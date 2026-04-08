@@ -1,0 +1,7 @@
+<a [routerLink]="['']"> Главная </a>
+<a routerLink='search'> Поиск </a>
+@if (isAuth()) {
+  <a [routerLink]="['profile']"> Мой профиль </a>
+} @else {
+  <a [routerLink]="['login']">Войти</a>
+}

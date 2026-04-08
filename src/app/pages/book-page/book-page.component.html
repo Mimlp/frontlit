@@ -1,0 +1,94 @@
+<!-- book-page.component.html -->
+<div class="book-page" [class.editing]="isEditing()">
+
+  @if (!book()) {
+    <div>Загрузка...</div>
+  }
+
+  @if (book(); as book) {
+
+    <!-- 🔹 Режим просмотра -->
+    @if (!isEditing()) {
+      <h1>{{ book.title }}</h1>
+
+      <div class="book-author">
+        Автор: {{ book.author.username }}
+      </div>
+
+      <div>
+        Теги:
+        @for (tag of book.tags; track tag.tagId) {
+          {{ tag.tagName }}
+        }
+      </div>
+
+      <div class="book-description">
+        {{ book.description }}
+      </div>
+
+      @if (currentUserIsAuthor()) {
+        <div class="book-actions">
+          <button class="btn btn-edit" (click)="startEditing()">
+            Изменить
+          </button>
+          <a class="btn btn-primary" [routerLink]="['chapter']">
+            Добавить главу
+          </a>
+        </div>
+      }
+    }
+
+    @if (isEditing() && currentUserIsAuthor()) {
+      <div class="book-edit-form">
+        <label>
+          Название книги:
+          <input
+            type="text"
+            [(ngModel)]="editTitle"
+            class="form-control"
+            placeholder="Введите название"
+          />
+        </label>
+
+        <label>
+          Описание:
+          <textarea
+            [(ngModel)]="editDescription"
+            class="form-control"
+            rows="5"
+            placeholder="Введите описание"
+          ></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button class="btn btn-success" (click)="saveChanges()">
+            Сохранить
+          </button>
+          <button class="btn btn-secondary" (click)="cancelEditing()">
+            Отмена
+          </button>
+        </div>
+      </div>
+    }
+
+    <h2>Главы</h2>
+
+    @if (!book.chapters || book.chapters.length === 0) {
+      <div>Глав пока нет</div>
+    }
+
+    <div class="chapter-list">
+      @for (chapter of book.chapters; track chapter.chapterId) {
+        <div class="chapter-item">
+          <a class="chapter-link" [routerLink]="['chapter', chapter.chapterId]">
+            {{ chapter.chapterNumber }}. {{ chapter.chapterTitle }}
+          </a>
+        </div>
+      }
+    </div>
+
+  }
+
+  <router-outlet></router-outlet>
+
+</div>

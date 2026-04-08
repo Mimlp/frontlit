@@ -1,0 +1,91 @@
+<div class="profile-page">
+
+  @if (user(); as user) {
+
+    <div class="profile-card">
+
+      <div class="avatar-name">
+        <img
+          src="/для%20Ксюши.png"
+          alt="avatar"
+          class="profile-card__avatar"
+        >
+
+        <div class="profile-card__name">
+          <strong>{{ user.username }}</strong>
+          <button class="btn">Изменить имя пользователя</button>
+        </div>
+      </div>
+
+      <!-- Просмотр описания -->
+      @if (!editDescription()) {
+
+        <p>{{ user.profileDescription || 'Описание отсутствует' }}</p>
+
+        @if (thisIsMe()) {
+          <button
+            class="btn"
+            (click)="startEdit()"
+          >
+            Редактировать описание
+          </button>
+        }
+
+      }
+
+      <!-- Редактирование -->
+      @if (thisIsMe() && editDescription()) {
+
+        <form
+          class="login-form"
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()"
+        >
+
+          <textarea
+            formControlName="profileDescription"
+            class="login-input"
+          ></textarea>
+
+          <div class="actions">
+            <button class="btn" type="submit">Изменить</button>
+            <button class="btn" type="button" (click)="stopEdit()">Отменить</button>
+          </div>
+
+        </form>
+
+      }
+
+    </div>
+
+
+    <!-- Работы -->
+    <div class="works">
+      @for (book of books(); track book.bookId) {
+        <app-book-card
+          [book]="book"
+        ></app-book-card>
+      }
+    </div>
+
+
+    <!-- Кнопки -->
+    @if (thisIsMe()) {
+
+      <div class="profile-actions">
+
+        <a routerLink="/addwork" class="btn">
+          Добавить свою работу
+        </a>
+
+        <button class="btn" (click)="logout()">
+          Выйти из профиля
+        </button>
+
+      </div>
+
+    }
+
+  }
+
+</div>

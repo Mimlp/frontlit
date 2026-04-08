@@ -1,0 +1,10 @@
+:host {
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  height: 100%;
+}
+a {
+  text-decoration: none;
+  color: var(--dark-green-color);
+}

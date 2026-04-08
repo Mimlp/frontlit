@@ -1,0 +1,20 @@
+@if (user) {
+  <div class="profile-card">
+    <div class="avatar-name">
+      @if (user.userId == 33) {
+      <img src="/для%20Ксюши.png" alt="avatar" class="profile-card__avatar">
+      } @else {
+        <img src="/ava.png" alt="avatar" class="profile-card__avatar">
+      }
+      <div class="profile-card__name">
+        <a [routerLink]="['/profile', user.userId]">{{user.username}}</a>
+      </div>
+    </div>
+    <div class="profile-card__description">
+      {{user.profileDescription}}
+    </div>
+  </div>
+} @else {
+  Данных нет
+}
+

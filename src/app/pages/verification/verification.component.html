@@ -1,0 +1,28 @@
+<form
+  class="login-form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
+  <h1>Введите код из email</h1>
+
+  <label class="control-label">
+    Код
+    <input
+      formControlName="verificationCode"
+      class="login-input"
+      type="text"
+      placeholder="Введите код">
+  </label>
+
+  <button class="btn" type="submit">
+    Подтвердить
+  </button>
+
+  <button
+    class="btn"
+    type="button"
+    (click)="onResendCode()"
+  >
+    Отправить код ещё раз
+  </button>
+</form>

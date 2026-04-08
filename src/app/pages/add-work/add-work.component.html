@@ -1,0 +1,20 @@
+<form
+  class="login-form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
+  <h1>Добавить работу</h1>
+  <label class="control-label">
+    Название
+    <input
+      formControlName="title"
+      class="login-input" type = "text" placeholder="Введите название">
+  </label>
+  <label class="control-label">
+    Описание
+    <input
+      formControlName="description"
+      class="login-input" type = "text" placeholder="Введите описание">
+  </label>
+  <button class="btn" type="submit">Добавить работу</button>
+</form>

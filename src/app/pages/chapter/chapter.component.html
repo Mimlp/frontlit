@@ -1,0 +1,56 @@
+<div class="chapter">
+
+  @if (!chapter() && !createMode()) {
+    <div>Загрузка...</div>
+  }
+
+  @if (chapter(); as chapter) {
+
+    @if (currentUserIsAuthor() && !editMode) {
+      <div class="chapter-actions">
+        <button (click)="startEdit()">Изменить</button>
+        <button (click)="deleteChapter()">Удалить</button>
+      </div>
+    }
+
+    <h2>{{ chapter.chapterTitle }}</h2>
+
+    @if (!editMode) {
+      <div class="chapter-text">{{ chapter.chapterText }}</div>
+    }
+
+    @if (editMode) {
+      <form [formGroup]="chapterForm" (ngSubmit)="saveChapter()">
+
+        <input formControlName="chapterTitle"/>
+
+        <textarea formControlName="chapterText"></textarea>
+        <div class="chapter-actions">
+          <button type="submit">Сохранить</button>
+          <button type="button" (click)="cancelEdit()">Отмена</button>
+        </div>
+
+      </form>
+    }
+
+  }
+
+  @if (createMode()) {
+
+    <form [formGroup]="chapterForm" (ngSubmit)="createChapter()">
+
+      <h2>Новая глава</h2>
+
+      <input formControlName="chapterTitle"/>
+
+      <textarea formControlName="chapterText"></textarea>
+      <div class="chapter-actions">
+        <button type="submit">Создать</button>
+        <button type="button" (click)="cancelEdit()">Отменить</button>
+      </div>
+
+    </form>
+
+  }
+
+</div>
