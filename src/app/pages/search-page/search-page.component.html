@@ -1,48 +1,83 @@
 <div class="search-page">
 
-  <!-- 🔸 Левая часть — результаты -->
   <div class="search-results">
-    @if (books?.length === 0) {
-      <div>Ничего не найдено</div>
-    }
 
-    @for (book of books; track book.bookId) {
-      <app-book-card [book]="book"></app-book-card>
-    }
-  </div>
-
-  <!-- 🔸 Правая часть — фильтры -->
-  <div class="search-filters">
-
-    <h3>Поиск</h3>
-
-    <!-- поиск по названию -->
-    <input
-      type="text"
-      class="login-input"
-      placeholder="Название книги..."
-      [(ngModel)]="searchQuery"
-    />
-
-    <!-- теги -->
-    <div class="filter-block">
-      <div class="filter-title">Теги</div>
-
-      @for (tag of allTags; track tag.tagId) {
-        <label class="tag-option">
-          <input
-            type="checkbox"
-            [value]="tag.tagId"
-            (change)="onTagToggle(tag.tagId, $event)"
-          />
-          {{ tag.tagName }}
-        </label>
+    <div class="search-header">
+      <h2>Результаты поиска</h2>
+      @if (activeFiltersCount() > 0) {
+        <span class="filters-badge">
+          Фильтров: {{ activeFiltersCount() }}
+          <button class="btn-reset" (click)="resetFilters()" title="Сбросить фильтры">✕</button>
+        </span>
       }
     </div>
 
-    <button class="btn" (click)="applyFilters()">
-      Найти
-    </button>
+    @if (loading()) {
+      <div class="loading-results">Поиск...</div>
+    } @else if (books().length === 0 && initialized()) {
+      <div class="empty-results">
+        <p>Ничего не найдено по вашему запросу.</p>
+        @if (activeFiltersCount() > 0) {
+          <button class="btn btn-secondary" (click)="resetFilters()">
+            Сбросить фильтры
+          </button>
+        }
+      </div>
+    } @else {
+      @for (book of books(); track book.bookId) {
+        <app-book-card [book]="book"></app-book-card>
+      }
+    }
+  </div>
+
+  <div class="search-filters">
+
+    <h3>Фильтры</h3>
+
+    <div class="filter-block">
+      <label class="filter-title" for="search-input">Название книги</label>
+      <input
+        id="search-input"
+        type="text"
+        class="login-input"
+        placeholder="Введите название..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applyFilters()"
+      />
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Теги</div>
+
+      @if (allTags().length === 0) {
+        <p class="text-muted">Теги загружаются...</p>
+      } @else {
+        <div class="tag-list">
+          @for (tag of allTags(); track tag.tagId) {
+            <label class="tag-option">
+              <input
+                type="checkbox"
+                [id]="'tag-' + tag.tagId"
+                [checked]="selectedTagIds().has(tag.tagId)"
+                (change)="onTagToggle(tag.tagId, $event)"
+              />
+              <span>{{ tag.tagName }}</span>
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn btn-primary" (click)="applyFilters()">
+        Найти
+      </button>
+      @if (activeFiltersCount() > 0) {
+        <button class="btn btn-secondary" (click)="resetFilters()">
+          Сбросить
+        </button>
+      }
+    </div>
 
   </div>
 

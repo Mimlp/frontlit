@@ -13,4 +13,6 @@ export interface BookInterface {
   author: UserInterface;
   tags: TagInterface[];
   userRights: UserRights;
+  rating: number;
+  ratingCount: number;
 }

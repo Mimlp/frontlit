@@ -17,17 +17,27 @@ export class RegisterPageComponent {
   form = new FormGroup({
     email: new FormControl<string | null>(null, Validators.required),
     password: new FormControl<string | null>(null, Validators.required),
-    login: new FormControl<string | null>(null, Validators.required),
     username: new FormControl<string | null>(null, Validators.required)
   })
   onSubmit() {
     if (this.form.valid) {
-      //@ts-ignore
-      this.authService.register(this.form.value).subscribe(res => {
-        this.router.navigate(['/verification']);
-      });
+      const email = this.form.controls.email.value;
+      const password = this.form.controls.password.value;
+      const username = this.form.controls.username.value;
+
+      if (email && password&& username) {
+        this.authService.register({ email, password, username }).subscribe({
+          next: () => {
+            this.router.navigate(['/verification']);
+          },
+          error: (err) => {
+            console.error('Ошибка регистрации', err);
+          }
+        });
+      }
     } else {
       console.warn('Форма невалидна');
+      this.form.markAllAsTouched();
     }
   }
 }

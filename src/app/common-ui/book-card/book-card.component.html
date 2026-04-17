@@ -1,11 +1,16 @@
 <div class="work-card">
-<a [routerLink]="['/book', book?.bookId]" class="work-title">{{book?.title}}</a>
-<div>Метки:
-  @for (tag of book?.tags; track tag.tagId) {
-    {{tag.tagName}}
+  <a [routerLink]="['/book', book?.bookId]" class="work-title">{{ book?.title }}</a>
+  <div>Метки:
+    @for (tag of book?.tags; track tag.tagId) {
+      {{ tag.tagName }}
+    }
+  </div>
+  <div>Описание:</div>
+  <div class="work-description">{{ book?.description }}</div>
+  @if (book?.rating != null) {
+    <div>Рейтинг: {{ book?.rating }}</div>
   }
-</div>
-<div>Описание:</div>
-<div class="work-description">{{book?.description}}</div>
-<div>Рейтинг: {{book?.bookId}}</div>
+  @if (book?.ratingCount != null) {
+    <div>Количество оценок: {{ book?.ratingCount }}</div>
+  }
 </div>

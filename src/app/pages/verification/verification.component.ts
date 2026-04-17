@@ -20,10 +20,14 @@ export class VerificationComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      //@ts-ignore
-      this.authService.verify(this.form.value).subscribe(res => {
-        this.router.navigate(['/login']);
-      });
+      const verificationCode = this.form.controls.verificationCode.value;
+
+      if (verificationCode) { // Type guard: сужаем string | null → string
+        this.authService.verify({ verificationCode }).subscribe({
+          next: () => this.router.navigate(['/login']),
+          error: (err) => console.error('Ошибка верификации', err)
+        });
+      }
     } else {
       console.warn('Форма невалидна');
     }

@@ -1,13 +1,12 @@
-<!-- book-page.component.html -->
+<!-- src/app/features/book/pages/book-page/book-page.component.html -->
 <div class="book-page" [class.editing]="isEditing()">
 
   @if (!book()) {
-    <div>Загрузка...</div>
+    <div class="loading">Загрузка...</div>
   }
 
   @if (book(); as book) {
 
-    <!-- 🔹 Режим просмотра -->
     @if (!isEditing()) {
       <h1>{{ book.title }}</h1>
 
@@ -15,10 +14,14 @@
         Автор: {{ book.author.username }}
       </div>
 
-      <div>
-        Теги:
-        @for (tag of book.tags; track tag.tagId) {
-          {{ tag.tagName }}
+      <div class="book-tags">
+        <strong>Теги:</strong>
+        @if (book.tags && book.tags.length > 0) {
+          @for (tag of book.tags; track tag.tagId) {
+            <span class="tag-badge">{{ tag.tagName }}</span>
+          }
+        } @else {
+          <span class="text-muted">Нет тегов</span>
         }
       </div>
 
@@ -31,10 +34,22 @@
           <button class="btn btn-edit" (click)="startEditing()">
             Изменить
           </button>
-          <a class="btn btn-primary" [routerLink]="['chapter']">
+          <button class="btn btn-danger" (click)="deleteBook()">
+            Удалить
+          </button>
+          <a class="btn btn-primary" [routerLink]="['chapter', 'new']">
             Добавить главу
           </a>
+          <button class="btn btn-secondary" (click)="openTagSelector()">
+            Управление тегами
+          </button>
         </div>
+      }
+
+      @if (currentUserIsAuthenticated()) {
+        <button class="btn btn-outline-primary" (click)="openBooklistSelector()">
+          Добавить в список
+        </button>
       }
     }
 
@@ -74,7 +89,7 @@
     <h2>Главы</h2>
 
     @if (!book.chapters || book.chapters.length === 0) {
-      <div>Глав пока нет</div>
+      <div class="empty-state">Глав пока нет</div>
     }
 
     <div class="chapter-list">
@@ -87,6 +102,160 @@
       }
     </div>
 
+  }
+  @if (showBooklistSelector()) {
+    <div class="modal-overlay" (click)="closeBooklistSelector()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Выберите список</h3>
+
+        @if (loadingBooklists()) {
+          <p>Загрузка списков...</p>
+        } @else if (userBooklists().length === 0) {
+          <p>У вас пока нет списков.</p>
+          <a routerLink="/profile/booklist" (click)="closeBooklistSelector()">
+            Создать новый список
+          </a>
+        } @else {
+          <div class="booklist-options">
+            @for (list of userBooklists(); track list.listId) {
+              <label class="booklist-option">
+                <input
+                  type="radio"
+                  name="booklist"
+                  [value]="list.listId"
+                  (change)="selectedBooklistId.set(list.listId)"
+                />
+                <span>{{ list.title }}</span>
+                <small>({{ list.books?.length || 0 }} книг)</small>
+              </label>
+            }
+          </div>
+
+          <div class="modal-actions">
+            <button
+              class="btn btn-primary"
+              (click)="addBookToSelectedList()"
+              [disabled]="!selectedBooklistId()"
+            >
+              Добавить
+            </button>
+            <button class="btn btn-secondary" (click)="closeBooklistSelector()">
+              Отмена
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (showTagSelector()) {
+    <div class="modal-overlay" (click)="closeTagSelector()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Управление тегами</h3>
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Поиск тегов..."
+          [(ngModel)]="tagSearchQuery"
+          autofocus
+          [disabled]="showCreateTagInput()"
+        />
+
+        @if (loadingTags()) {
+          <p>Загрузка тегов...</p>
+        } @else if (allTags().length === 0 && !showCreateTagInput()) {
+          <p>Доступных тегов пока нет.</p>
+          <button class="btn btn-primary" (click)="showNewTagInput()">
+            + Создать первый тег
+          </button>
+        } @else {
+
+          @if (showCreateTagInput()) {
+            <div class="create-tag-form">
+              <input
+                id="new-tag-input"
+                type="text"
+                class="form-control"
+                placeholder="Введите название тега..."
+                [(ngModel)]="newTagName"
+                (keydown)="onTagInputKeydown($event)"
+                [disabled]="creatingTag()"
+              />
+
+              @if (tagCreateError()) {
+                <small class="error-text">{{ tagCreateError() }}</small>
+              }
+
+              <div class="create-tag-actions">
+                <button
+                  class="btn btn-success btn-sm"
+                  (click)="createNewTag()"
+                  [disabled]="creatingTag() || !newTagName().trim()"
+                >
+                  {{ creatingTag() ? 'Создание...' : 'Создать и выбрать' }}
+                </button>
+                <button
+                  class="btn btn-secondary btn-sm"
+                  (click)="hideNewTagInput()"
+                  [disabled]="creatingTag()"
+                >
+                  Отмена
+                </button>
+              </div>
+            </div>
+          }
+
+          <div class="tag-options">
+            @for (tag of allTags() | filterBy: tagSearchQuery() : 'tagName'; track tag.tagId) {
+              <label class="tag-option" [class.selected]="isTagSelected(tag.tagId)">
+                <input
+                  type="checkbox"
+                  [checked]="isTagSelected(tag.tagId)"
+                  (change)="toggleTagSelection(tag.tagId)"
+                  [disabled]="showCreateTagInput()"
+                />
+                <span>{{ tag.tagName }}</span>
+              </label>
+            } @empty {
+              @if (tagSearchQuery() && !showCreateTagInput()) {
+                <div class="tag-not-found">
+                  <p class="text-muted">По запросу "{{ tagSearchQuery() }}" ничего не найдено</p>
+                  <button class="btn btn-primary btn-sm" (click)="showNewTagInput()">
+                    + Создать тег "{{ tagSearchQuery() }}"
+                  </button>
+                </div>
+              }
+            }
+          </div>
+
+          @if (!showCreateTagInput() && allTags().length > 0) {
+            <button class="btn btn-outline-primary btn-sm" (click)="showNewTagInput()">
+              + Добавить свой тег
+            </button>
+          }
+
+          @if (selectedTagIds().size > 0) {
+            <div class="selected-tags-preview">
+              <small>Выбрано: {{ selectedTagIds().size }}</small>
+            </div>
+          }
+
+          <div class="modal-actions">
+            <button
+              class="btn btn-primary"
+              (click)="saveSelectedTags()"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-secondary" (click)="closeTagSelector()">
+              Отмена
+            </button>
+          </div>
+
+        }
+      </div>
+    </div>
   }
 
   <router-outlet></router-outlet>

@@ -12,12 +12,49 @@
         >
 
         <div class="profile-card__name">
-          <strong>{{ user.username }}</strong>
-          <button class="btn">Изменить имя пользователя</button>
+
+          @if (!editUsername()) {
+            <strong>{{ user.username }}</strong>
+            @if (thisIsMe()) {
+              <button class="btn" (click)="startEditUsername()">
+                Изменить имя пользователя
+              </button>
+            }
+          }
+
+          @if (editUsername() && thisIsMe()) {
+            <form [formGroup]="usernameForm" (ngSubmit)="onSubmitUsername()" class="edit-username-form">
+              <input
+                formControlName="username"
+                class="login-input"
+                placeholder="Новое имя пользователя"
+              />
+
+              @if (usernameForm.controls.username.errors) {
+                <small class="error">
+                  @if (usernameForm.controls.username.errors['required']) {
+                    Имя обязательно
+                  }
+                  @if (usernameForm.controls.username.errors['minlength']) {
+                    Минимум 3 символа
+                  }
+                </small>
+              }
+
+              <div class="actions">
+                <button class="btn" type="submit" [disabled]="usernameForm.invalid">
+                  Сохранить
+                </button>
+                <button class="btn" type="button" (click)="stopEditUsername()">
+                  Отмена
+                </button>
+              </div>
+            </form>
+          }
+
         </div>
       </div>
 
-      <!-- Просмотр описания -->
       @if (!editDescription()) {
 
         <p>{{ user.profileDescription || 'Описание отсутствует' }}</p>
@@ -33,7 +70,6 @@
 
       }
 
-      <!-- Редактирование -->
       @if (thisIsMe() && editDescription()) {
 
         <form
@@ -58,8 +94,6 @@
 
     </div>
 
-
-    <!-- Работы -->
     <div class="works">
       @for (book of books(); track book.bookId) {
         <app-book-card
@@ -69,23 +103,53 @@
     </div>
 
 
-    <!-- Кнопки -->
     @if (thisIsMe()) {
-
-      <div class="profile-actions">
-
-        <a routerLink="/addwork" class="btn">
-          Добавить свою работу
-        </a>
-
-        <button class="btn" (click)="logout()">
-          Выйти из профиля
-        </button>
-
-      </div>
-
+      <a routerLink="/addwork" class="btn">
+        Добавить свою работу
+      </a>
     }
 
+    <div class="booklists-section">
+
+      <h2 class="section-title">Списки книг</h2>
+
+      @if (booklists().length > 0) {
+
+        <div class="booklists-grid">
+
+          @for (bl of booklists(); track bl.listId) {
+            <a
+              class="booklist-card"
+              [routerLink]="['booklist', bl.listId]"
+            >
+              <span class="booklist-title">{{ bl.title }}</span>
+            </a>
+          }
+
+        </div>
+
+      } @else if (thisIsMe()) {
+
+        <div class="empty-state">
+          Списков ещё нет.
+        </div>
+
+      }
+
+      @if (thisIsMe()) {
+        <div class="booklist-create">
+          <a class="btn" [routerLink]="['booklist']">
+            Добавить список
+          </a>
+        </div>
+      }
+
+    </div>
+    @if (thisIsMe()) {
+      <button class="btn" (click)="logout()">
+        Выйти из профиля
+      </button>
+    }
   }
 
 </div>

@@ -40,4 +40,55 @@
   cursor: pointer;
 }
 
+.booklists-section {
+  margin-top: 35px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 14px;
+}
+
+.section-title {
+  margin: 0 0 20px 0;
+  color: var(--dark-green-color);
+  font-size: 24px;
+}
+
+.booklists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.booklist-card {
+  display: block;
+  padding: 18px;
+  background: white;
+  border-radius: 12px;
+  transition: 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  border: 1px solid #eee;
+}
+
+.booklist-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.booklist-title {
+  color: var(--dark-green-color);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.booklist-create {
+  margin-top: 20px;
+}
+
+.empty-state {
+  padding: 18px;
+  border-radius: 10px;
+  background: white;
+  color: #666;
+}
+
 /*# sourceMappingURL=profile-page.component.css.map */

@@ -14,6 +14,8 @@ import { BookInterface } from '../../data/interfaces/book.interface';
 import { UserInterface } from '../../data/interfaces/user.interface';
 
 import { BookCardComponent } from '../../common-ui/book-card/book-card.component';
+import {BookListInterface} from '../../data/interfaces/booklist.interface';
+import {BooklistService} from '../../data/services/booklist.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -27,13 +29,15 @@ export class ProfilePageComponent {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private bookService = inject(BookService);
+  private bookListService = inject(BooklistService);
   private route = inject(ActivatedRoute);
 
   me = this.userService.me;
 
   user = signal<UserInterface | null>(null);
   books = signal<BookInterface[]>([]);
-
+  booklists = signal<BookListInterface[]>([]);
+  editUsername = signal(false);
   editDescription = signal(false);
 
   profileId = toSignal(
@@ -57,7 +61,12 @@ export class ProfilePageComponent {
       validators: [Validators.required]
     })
   });
-
+  usernameForm = new FormGroup({
+    username: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)]
+    })
+  });
   constructor() {
     effect(() => {
       const id = this.profileId();
@@ -73,6 +82,10 @@ export class ProfilePageComponent {
           this.books.set(books);
         });
 
+        this.bookListService.findByUser(userId).subscribe(booklists => {
+          this.booklists.set(booklists);
+        })
+
       } else {
         this.userService.getMe().subscribe(user => {
           this.user.set(user);
@@ -81,6 +94,10 @@ export class ProfilePageComponent {
         this.bookService.getMyBooks().subscribe(books => {
           this.books.set(books);
         });
+
+        this.bookListService.findMyBooklists().subscribe(bookLists => {
+          this.booklists.set(bookLists);
+        })
       }
     });
   }
@@ -126,4 +143,38 @@ export class ProfilePageComponent {
     this.authService.logout();
   }
 
+  protected startEditUsername() {
+    this.usernameForm.setValue({
+      username: this.user()?.username ?? ''
+    });
+    this.editUsername.set(true);
+  }
+
+  protected stopEditUsername() {
+    this.editUsername.set(false);
+    this.usernameForm.reset();
+  }
+
+  protected onSubmitUsername() {
+    if (this.usernameForm.invalid) return;
+
+    const newUsername = this.usernameForm.controls.username.value;
+
+    this.userService.changeUserName({ userName: newUsername }).subscribe({
+      next: (updatedUser) => {
+        this.user.set(updatedUser);
+
+        if (this.thisIsMe()) {
+          this.me.set(updatedUser);
+        }
+
+        this.editUsername.set(false);
+        this.usernameForm.reset();
+      },
+      error: (err) => {
+        console.error('Ошибка при смене имени:', err);
+        alert('Не удалось изменить имя пользователя');
+      }
+    });
+  }
 }

@@ -46,6 +46,7 @@
   font-weight: 500;
   margin: 15px 0;
 }
+
 .chapter-list {
   display: flex;
   flex-direction: column;
@@ -68,11 +69,13 @@
   color: var(--dark-green-color);
   font-weight: 500;
 }
+
 .book-page {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 h2 {
   margin-top: 30px;
   margin-bottom: 10px;
@@ -85,6 +88,7 @@ a {
 a:hover {
   color: var(--green-color);
 }
+
 .book-edit-form {
   display: flex;
   flex-direction: column;
@@ -97,6 +101,7 @@ a:hover {
   border-radius: 10px;
   border: 1px solid #e0e0e0;
 }
+
 .book-edit-form label {
   display: flex;
   flex-direction: column;
@@ -104,6 +109,7 @@ a:hover {
   color: var(--dark-green-color);
   gap: 6px;
 }
+
 .book-edit-form input,
 .book-edit-form textarea {
   border: 1px solid #ccc;
@@ -118,13 +124,15 @@ a:hover {
 .book-edit-form textarea:focus {
   outline: none;
   border-color: var(--green-color);
-  box-shadow: 0 0 0 2px rgba(119,255,98,0.25);
+  box-shadow: 0 0 0 2px rgba(119, 255, 98, 0.25);
 }
+
 .form-actions {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
+
 .btn-success {
   background: var(--green-color);
   color: var(--dark-green-color);
@@ -134,12 +142,14 @@ a:hover {
   background: #ddd;
   color: #333;
 }
+
 .book-edit-form::before {
   content: "Режим редактирования";
   font-size: 12px;
   color: #888;
   margin-bottom: 5px;
 }
+
 .book-page.editing {
   opacity: 0.7;
 }
@@ -147,12 +157,14 @@ a:hover {
 .book-page.editing .book-edit-form {
   opacity: 1;
 }
+
 .book-actions {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: 15px;
 }
+
 .book-actions .btn {
   display: inline-flex;
   align-items: center;
@@ -160,10 +172,11 @@ a:hover {
 
   height: 42px;
   padding: 0 18px;
-  margin: 0; // убираем лишние отступы
+  margin: 0;
 
   font-size: 14px;
 }
+
 .btn-edit {
   background: #e0e0e0;
   color: #333;
@@ -173,7 +186,279 @@ a:hover {
   background: var(--green-color);
   color: var(--dark-green-color);
 }
+
 .book-actions a {
   text-decoration: none;
 }
 
+.book-tags {
+  margin-top: 14px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eefbe9;
+  color: var(--dark-green-color);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(6, 97, 0, 0.08);
+}
+
+.book-description {
+  margin-top: 16px;
+  padding: 18px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.empty-state {
+  padding: 18px;
+  border-radius: 10px;
+  background: #f6f6f6;
+  color: #666;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.loading {
+  padding: 30px;
+  text-align: center;
+  color: #666;
+}
+
+.form-control {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--green-color);
+  box-shadow: 0 0 0 2px rgba(119, 255, 98, 0.25);
+}
+
+.btn-danger {
+  background: #ffd6d6;
+  color: #8b0000;
+}
+
+.btn-outline-primary {
+  background: transparent;
+  border: 1px solid var(--green-color);
+  color: var(--dark-green-color);
+}
+
+.btn-outline-primary:hover {
+  background: #eefbe9;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  color: var(--dark-green-color);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.booklist-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booklist-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.booklist-option:hover {
+  background: #efefef;
+}
+
+.booklist-option small {
+  margin-left: auto;
+  color: #666;
+}
+
+/* ===== TAG SELECTOR ===== */
+.tag-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.tag-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.tag-option:hover {
+  background: #eeeeee;
+}
+
+.tag-option.selected {
+  background: #eefbe9;
+  border: 1px solid rgba(6, 97, 0, 0.12);
+}
+
+.selected-tags-preview {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f8f8f8;
+  color: #555;
+}
+
+.text-muted {
+  color: #777;
+}
+
+@media (max-width: 768px) {
+  .book-page {
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .book-actions,
+  .modal-actions,
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .book-actions .btn,
+  .modal-actions .btn,
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .chapter-item {
+    padding: 14px;
+  }
+}
+.create-tag-form {
+  margin: 16px 0;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+
+  .form-control {
+    margin-bottom: 10px;
+  }
+
+  .error-text {
+    display: block;
+    color: #dc3545;
+    font-size: 12px;
+    margin-bottom: 10px;
+    min-height: 16px;
+  }
+}
+
+.create-tag-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+  height: auto;
+  margin: 0;
+}
+
+.tag-not-found {
+  text-align: center;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+
+  .text-muted {
+    margin-bottom: 12px;
+  }
+}
+
+.create-tag-form {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tag-option input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tag-option:has(input:disabled) {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

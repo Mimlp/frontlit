@@ -24,10 +24,8 @@ export class AddWorkComponent {
 
     const payload = this.form.value;
 
-    // Отправляем POST-запрос
     this.http.post<number>(`${this.baseApiUrl}/me/addwork`, payload).subscribe({
       next: (bookId) => {
-        // После успешного сохранения перенаправляем на страницу книги
         this.router.navigate(['/book', bookId]);
       },
       error: (err) => {

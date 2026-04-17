@@ -21,12 +21,20 @@ export class LoginPageComponent {
   })
   onSubmit() {
     if (this.form.valid) {
-      //@ts-ignore
-      this.authService.login(this.form.value).subscribe(res => {
-        this.router.navigate(['/profile']);
-      });
+      const email = this.form.controls.email.value;
+      const password = this.form.controls.password.value;
+
+      if (email && password) {
+        this.authService.login({ email, password }).subscribe({
+          next: () => this.router.navigate(['/profile']),
+          error: (err) => {
+            console.error('Ошибка входа', err);
+          }
+        });
+      }
     } else {
       console.warn('Форма невалидна');
+      this.form.markAllAsTouched();
     }
   }
 

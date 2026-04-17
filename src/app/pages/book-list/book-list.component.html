@@ -1,0 +1,74 @@
+<div class="page-container">
+
+  <h1 class="page-title">Список книг</h1>
+
+  @if (createMode) {
+    <div class="form-card">
+      <form [formGroup]="bookListForm" (ngSubmit)="createBookList()">
+
+        <label class="control-label">Название списка</label>
+        <input class="login-input" formControlName="title"/>
+
+        <button class="btn" type="submit">Сохранить</button>
+
+      </form>
+    </div>
+  }
+
+  @if (!createMode) {
+    <div class="list-header">
+      <h2>{{ booklist()?.title }}</h2>
+
+      @if (editMode) {
+        <div class="actions">
+          <button class="btn" (click)="startEdit()">Изменить название</button>
+          <button class="btn danger-btn" (click)="deleteBookList()">Удалить список</button>
+        </div>
+      }
+    </div>
+  }
+
+  @if (editOn) {
+    <div class="form-card">
+      <form [formGroup]="bookListForm" (ngSubmit)="editBookList()">
+
+        <label class="control-label">Новое название</label>
+        <input class="login-input" formControlName="title"/>
+
+        <div class="actions">
+          <button class="btn" type="submit">Сохранить</button>
+          <button class="btn secondary-btn" type="button" (click)="cancelEdit()">Отмена</button>
+        </div>
+
+      </form>
+    </div>
+  }
+
+  @if (!createMode) {
+    @if (booklist()!.books.length == 0) {
+      <div class="empty-state">
+        Кажется, в списке ещё нет работ. Может, самое время что-то почитать?
+      </div>
+    } @else {
+
+      <div class="works">
+        @for (book of booklist()!.books; track book.bookId) {
+
+          <div class="work-card">
+            <app-book-card [book]="book"></app-book-card>
+
+            @if (editMode) {
+              <button class="btn danger-btn"
+                      (click)="deleteBookFromList(book.bookId)">
+                Удалить работу из списка
+              </button>
+            }
+          </div>
+
+        }
+      </div>
+
+    }
+  }
+
+</div>

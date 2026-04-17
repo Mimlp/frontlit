@@ -43,7 +43,7 @@ export class AuthService {
     )
   }
 
-  register(payload: { email: string, password: string, login: string, username: string }) {
+  register(payload: { email: string, password: string, username: string }) {
     return this.http.post<UserInterface>(
       `${this.baseApiUrl}/signup`,
       payload,

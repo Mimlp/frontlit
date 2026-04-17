@@ -1,0 +1,68 @@
+.page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.page-title {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: var(--dark-green-color);
+}
+
+.form-card {
+  background: #f8f8f8;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.list-header h2 {
+  margin: 0;
+  color: var(--dark-green-color);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.secondary-btn {
+  background: #ddd;
+  color: #333;
+}
+
+.danger-btn {
+  background: #ffd6d6;
+  color: #8b0000;
+}
+
+.empty-state {
+  padding: 25px;
+  border-radius: 12px;
+  background: #f4f4f4;
+  color: #555;
+  text-align: center;
+  font-size: 16px;
+}
+
+.work-card {
+  padding: 20px;
+  border-radius: 12px;
+  background: #f4f4f4;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+}
+
+.work-card .btn {
+  margin-top: 15px;
+}

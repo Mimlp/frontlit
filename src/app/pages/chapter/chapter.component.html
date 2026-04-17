@@ -10,6 +10,7 @@
       <div class="chapter-actions">
         <button (click)="startEdit()">Изменить</button>
         <button (click)="deleteChapter()">Удалить</button>
+        <a [routerLink]="['/book', book()?.bookId]">Отменить</a>
       </div>
     }
 

@@ -35,4 +35,10 @@ export class UserService {
         tap(res => this.me.set(res))
       )
   }
+  changeUserName(payload: {userName: string}) {
+    return this.http.put<UserInterface>(`${this.baseApiUrl}/me/profile`, payload)
+      .pipe(
+        tap(res => this.me.set(res))
+      )
+  }
 }
