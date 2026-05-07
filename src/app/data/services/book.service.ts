@@ -1,10 +1,10 @@
-// src/app/data/services/book.service.ts
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BookInterface } from '../interfaces/book.interface';
 import { ChapterInterface } from '../interfaces/chapter.interface';
 import { TagInterface } from '../interfaces/tag.interface';
 import { tap } from 'rxjs';
+import {API_CONFIG} from '../../api.config';
 
 export interface CreateChapterDto {
   chapterTitle: string;
@@ -17,7 +17,7 @@ export interface CreateChapterDto {
 export class BookService {
 
   private http = inject(HttpClient);
-  baseApiUrl: string = 'http://localhost:8080';
+  private readonly baseApiUrl: string = API_CONFIG.BASE_URL;
 
   book = signal<BookInterface | null>(null);
 

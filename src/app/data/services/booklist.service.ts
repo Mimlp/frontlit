@@ -2,13 +2,14 @@ import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BookListInterface} from '../interfaces/booklist.interface';
 import {BookInterface} from '../interfaces/book.interface';
+import {API_CONFIG} from '../../api.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BooklistService {
   private http = inject(HttpClient);
-  private baseApiUrl: string = 'http://localhost:8080';
+  private baseApiUrl: string = API_CONFIG.BASE_URL;
 
   findMyBooklists() {
     return this.http.get<BookListInterface[]>(`${this.baseApiUrl}/user/me/booklists`)

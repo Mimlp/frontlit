@@ -6,4 +6,5 @@ export interface CommentInterface {
 
   bookId: number;
   userId: number;
+  currentUserIsAuthor: boolean;
 }

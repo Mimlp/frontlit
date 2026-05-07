@@ -2,13 +2,14 @@ import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserInterface} from '../interfaces/user.interface';
 import {catchError, tap} from 'rxjs';
+import {API_CONFIG} from '../../api.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   http = inject(HttpClient)
-  baseApiUrl: string = 'http://localhost:8080/user'
+  baseApiUrl: string = `${API_CONFIG.BASE_URL}/user`
 
   me = signal<UserInterface | null>(null)
   constructor() {

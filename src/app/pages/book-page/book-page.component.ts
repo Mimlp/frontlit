@@ -9,6 +9,7 @@ import {UserService} from '../../data/services/user.service';
 import {BooklistService} from '../../data/services/booklist.service';
 import {BookListInterface} from '../../data/interfaces/booklist.interface';
 import {TagInterface} from '../../data/interfaces/tag.interface';
+import {RatingService} from '../../data/services/rating.service';
 
 @Component({
   selector: 'app-book-page',
@@ -24,6 +25,7 @@ export class BookPageComponent {
   private bookService = inject(BookService);
   private userService = inject(UserService);
   private booklistService = inject(BooklistService);
+  private ratingService = inject(RatingService);
 
   book = this.bookService.book;
 
